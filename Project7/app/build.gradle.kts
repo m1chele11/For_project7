@@ -1,15 +1,10 @@
-import org.jetbrains.kotlin.gradle.internal.kapt.incremental.UnknownSnapshot.classpath
+//import org.jetbrains.kotlin.gradle.internal.kapt.incremental.UnknownSnapshot.classpath
 
 plugins {
-    id("org.jetbrains.kotlin.android")
-//    id("com.google.devtools.ksp")
-    id ("androidx.navigation.safeargs")
-
     id("com.android.application")
-    // Add the Google services Gradle plugin
+    id("org.jetbrains.kotlin.android")
+    id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
-
-
 }
 
 android {
