@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.database.ValueEventListener
 import edu.iu.mbarrant.project7.databinding.TasksFragmentBinding
 
 
@@ -30,17 +31,12 @@ class TasksFragment : Fragment()   {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        /* val adapter = TaskItemAdapter{ taskId ->
-             viewModel.onTaskClicked(taskId)
-
-         }*/
 
         fun taskClicked (task : Task) {
             viewModel.onTaskClicked(task)
         }
         fun yesPressed(taskId : String) {
             Log.d(TAG, "in yesPressed(): taskId = $taskId")
-            //TODO: delete the task with id = taskId
             binding.viewModel?.deleteTask(taskId)
         }
         fun deleteClicked (taskId : String) {

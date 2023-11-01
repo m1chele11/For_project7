@@ -1,5 +1,7 @@
 package edu.iu.mbarrant.project7
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +17,8 @@ import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 
 class TasksViewModel : ViewModel() {
-    private var auth: FirebaseAuth
+    //using firebase authentication
+    private var auth: FirebaseAuth = Firebase.auth
 
     var user: User = User()
     var verifyPassword = ""
@@ -44,11 +47,12 @@ class TasksViewModel : ViewModel() {
     val navigateToSignIn: LiveData<Boolean>
         get() = _navigateToSignIn
 
+
+    //using firebase realtime database
     private lateinit var tasksCollection: DatabaseReference
 
 
     init {
-        auth = Firebase.auth
         if (taskId.trim() == "") {
             task.value = Task()
         }
@@ -63,6 +67,7 @@ class TasksViewModel : ViewModel() {
             .child(auth.currentUser!!.uid)
 
 
+        //addValueListner
         tasksCollection.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 var tasksList: ArrayList<Task> = ArrayList()
@@ -76,8 +81,7 @@ class TasksViewModel : ViewModel() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
-                // ...
+                Log.d("database error", "failed to create new task")
             }
         })
 
@@ -107,9 +111,12 @@ class TasksViewModel : ViewModel() {
     }
 
     fun onNewTaskClicked() {
-        _navigateToTask.value = ""
-        taskId = ""
+        taskId = "" // Clear the task ID to create a new task
         task.value = Task()
+
+        // Assuming you have a reference to the tasks node
+        tasksCollection.push() // Create a new child node under the tasks node
+            .setValue(task.value) // Set the value of the new task
     }
 
     fun onTaskNavigated() {
@@ -162,8 +169,10 @@ class TasksViewModel : ViewModel() {
         }
         auth.createUserWithEmailAndPassword(user.email, user.password).addOnCompleteListener {
             if (it.isSuccessful) {
+                Log.d("User created", "createUserWithEmail:success")
                 _navigateToSignIn.value = true
             } else {
+                Log.d("User creation Failed", "createUserWithEmail:failure")
                 _errorHappened.value = it.exception?.message
             }
         }

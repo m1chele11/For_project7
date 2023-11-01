@@ -1,9 +1,8 @@
-//import org.jetbrains.kotlin.gradle.internal.kapt.incremental.UnknownSnapshot.classpath
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("androidx.navigation.safeargs.kotlin")
+    id("com.google.devtools.ksp")
+    id("androidx.navigation.safeargs")
     id("com.google.gms.google-services")
 }
 
@@ -31,12 +30,20 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+
+
+
 
     buildFeatures {
         dataBinding = true
@@ -44,14 +51,11 @@ android {
 }
 
 dependencies {
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
 
     implementation("com.google.firebase:firebase-database-ktx:20.2.2")
-    implementation("com.google.firebase:firebase-auth:22.2.0")
-    implementation(platform("com.google.firebase:firebase-bom:32.4.1"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
-
-
-
+    implementation("com.google.firebase:firebase-auth-ktx")
     val lifecycle_version = "2.3.1"
     val room_version = "2.4.1"
     implementation("androidx.core:core-ktx:1.9.0")
@@ -66,7 +70,7 @@ dependencies {
     implementation ("androidx.room:room-runtime:$room_version")
     implementation ("androidx.room:room-ktx:$room_version")
     implementation("androidx.core:core-splashscreen:1.0.0")
-    //ksp("androidx.room:room-compiler:2.4.1")
+    ksp("androidx.room:room-compiler:2.4.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
