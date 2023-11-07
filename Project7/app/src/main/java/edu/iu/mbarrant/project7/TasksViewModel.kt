@@ -51,7 +51,6 @@ class TasksViewModel : ViewModel() {
     //using firebase realtime database
     private lateinit var tasksCollection: DatabaseReference
 
-
     init {
         if (taskId.trim() == "") {
             task.value = Task()
@@ -92,6 +91,7 @@ class TasksViewModel : ViewModel() {
     }
 
     fun updateTask() {
+//        initializeTheDatabaseReference()
         if (taskId.trim() == "") {
             tasksCollection.push().setValue(task.value)
         } else {
@@ -111,12 +111,13 @@ class TasksViewModel : ViewModel() {
     }
 
     fun onNewTaskClicked() {
+        _navigateToTask.value = ""
         taskId = "" // Clear the task ID to create a new task
         task.value = Task()
 
         // Assuming you have a reference to the tasks node
-        tasksCollection.push() // Create a new child node under the tasks node
-            .setValue(task.value) // Set the value of the new task
+//        tasksCollection.push() // Create a new child node under the tasks node
+//            .setValue(task.value) // Set the value of the new task
     }
 
     fun onTaskNavigated() {
